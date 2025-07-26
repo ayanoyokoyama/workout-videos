@@ -23,7 +23,7 @@
   </div>
 
   <script>
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzzAq6dUJEn2jDS7qun5CHGDGL97SdpS05__2cnJV7OH3va4hJhca0-q_-odWNnABvE/exec"; // Replace with your /exec URL
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzPx3YQDRdRZ83Krt1t29DkCcbJf6nd70QmrxuCPwmrMuZi-vMK9Yv0-KYs2_02IxkZ/exec";
 
     fetch(WEB_APP_URL)
       .then(res => res.json())
@@ -46,7 +46,7 @@
       })
       .catch(err => {
         console.error(err);
-        document.getElementById('workout').innerHTML = "<p class='error'>Error loading video (check CORS or public access).</p>";
+        document.getElementById('workout').innerHTML = "<p class='error'>Error loading video. Check that your Web App URL is public and returns JSON.</p>";
       });
   </script>
 </body>
