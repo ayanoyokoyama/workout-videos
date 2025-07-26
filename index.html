@@ -35,16 +35,7 @@
     <p>Loading latest workout video...</p>
   </div>
 
-  <script>
-    fetch("https://script.google.com/macros/s/AKfycbwKtz7n_GKZTGahofO1YSAyzFpQZOzCp1w6O6tI2jEe35ZVSMqhQl_pavy3BCg0nYl4/exc")
-      .then(response => response.text())
-      .then(html => {
-        document.getElementById("workout").innerHTML = html;
-      })
-      .catch(err => {
-        document.getElementById("workout").innerHTML = "<p>Error loading video.</p>";
-        console.error(err);
-      });
-  </script>
+  <iframe src="https://script.google.com/macros/s/AKfycbypaIWaIag5EaoTKu6MmW5cAuerQ_tJHEB9v3VaDpYOcx-tshqGNz6DapjD92FLEGSf/exec" style="width:100%; height:600px; border:0;"></iframe>
+
 </body>
 </html>
