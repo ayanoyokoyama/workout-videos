@@ -7,76 +7,67 @@
   <style>
     body { font-family: Arial, sans-serif; background:#fafafa; margin:0; padding:20px; }
     h1 { font-size: 24px; text-align: center; }
-    .video-container {
-      max-width: 700px;
-      margin: 20px auto;
-      background: #fff;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    .card {
+      max-width: 700px; margin: 20px auto; background: #fff;
+      padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,.08);
     }
     .responsive-iframe {
-      position: relative;
-      width: 100%;
-      padding-bottom: 56.25%;
-      height: 0;
-      overflow: hidden;
-      border-radius: 8px;
+      position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 8px;
     }
     .responsive-iframe iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
+      position: absolute; inset: 0; width: 100%; height: 100%; border: 0;
     }
-    .meta { font-size: 14px; color: #333; margin: 10px 0; }
-    a { color: #0d6efd; text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    .meta { font-size: 14px; color:#333; margin:10px 0; }
+    a { color:#0d6efd; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+    .error { color:#b00020; text-align:center; }
   </style>
 </head>
 <body>
   <h1>Workout of the Day</h1>
-  <div class="video-container">
-    <p>Loading workout...</p>
+  <div class="card" id="workout">
+    <p>Loading workout…</p>
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbxIGeAvuwG_4p7TS_0w0ycyqnaKa-JHqYAD8dHVzAN_L5qePdqaKBuhBuTyQbhBSnxj/exec?json=1";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxpFyWDJPmIKoXem7lRxohHpeymSmKgfNKLS_xFqwZvYoiMcp1dgTjNcve43jhnfcsv/exec?format=json";
 
     fetch(API_URL)
-      .then(res => res.json())
+      .then(r => r.json())
       .then(data => {
+        const el = document.getElementById('workout');
+
         if (data.error) {
-          document.querySelector('.video-container').innerHTML = `<p>${data.error}</p>`;
+          el.innerHTML = `<p class="error">${data.error}</p>`;
           return;
         }
 
         const shortDesc = (data.description || '').length > 200
-          ? data.description.substring(0, 200) + '... <a href="' + data.url + '" target="_blank">Read more</a>'
-          : data.description;
+          ? `${data.description.slice(0, 200)}… <a href="${data.url}" target="_blank" rel="noopener">Read more</a>`
+          : (data.description || '');
 
-        document.querySelector('.video-container').innerHTML = `
+        el.innerHTML = `
           <div class="responsive-iframe">
             <iframe src="https://www.youtube.com/embed/${data.videoId}" allowfullscreen></iframe>
           </div>
           <h2>${data.title}</h2>
           <p class="meta">
-            <b>Creator:</b> ${data.creator} &nbsp; • &nbsp; <b>Duration:</b> ${data.duration}
+            <strong>Creator:</strong> ${data.creator}
+            &nbsp; • &nbsp; <strong>Duration:</strong> ${data.duration}
           </p>
           <p class="meta">
-            <b>Focus:</b> ${data.focus} &nbsp; • &nbsp; 
-            <b>Type:</b> ${data.type} &nbsp; • &nbsp; 
-            <b>Equipment:</b> ${data.equipment}
+            <strong>Focus:</strong> ${data.focus}
+            &nbsp; • &nbsp; <strong>Type:</strong> ${data.type}
+            &nbsp; • &nbsp; <strong>Equipment:</strong> ${data.equipment}
           </p>
           <p>${shortDesc}</p>
-          <p><a href="${data.url}" target="_blank">Watch on YouTube →</a></p>
+          <p><a href="${data.url}" target="_blank" rel="noopener">Watch on YouTube →</a></p>
         `;
       })
       .catch(err => {
         console.error(err);
-        document.querySelector('.video-container').innerHTML = `<p>Error loading workout data.</p>`;
+        document.getElementById('workout').innerHTML =
+          `<p class="error">Error loading video. Check that the Web App is public and returns JSON.</p>`;
       });
   </script>
 </body>
